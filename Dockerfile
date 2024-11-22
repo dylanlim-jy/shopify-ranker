@@ -12,4 +12,4 @@ RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Specify the command to run your Python script
-CMD ["python", "prefect/deployments/deploy_shopify_apps.py"]
+CMD ["python", "prefect/shopify_apps.py"]
