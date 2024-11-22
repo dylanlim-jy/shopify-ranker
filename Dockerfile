@@ -8,6 +8,7 @@ WORKDIR /home/dylan/shopify-ranker
 COPY . .
 
 # Install dependencies (if you have a requirements.txt file)
+RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Specify the command to run your Python script
