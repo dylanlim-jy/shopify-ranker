@@ -1,4 +1,4 @@
-from flows.shopify_apps import shopify_apps_flow
+from ..flows.shopify_apps import shopify_apps_flow
 
 def deploy_shopify_apps_flow():
     shopify_apps_flow.deploy(
