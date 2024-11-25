@@ -182,11 +182,10 @@ def shopify_apps_flow():
 
 def deploy_shopify_apps_flow():
     shopify_apps_flow.deploy(
-        name="shopify-apps",
+        name="shopify-apps-deployment",
         work_pool_name="docker-pool",
         image="shopify-apps",
-        cron="0 0,6,12,18 * * *",
-        push=False
+        # cron="0 0,6,12,18 * * *",
     )
     return
 

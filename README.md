@@ -16,3 +16,8 @@ This is a project to track changes for Shopify app listings of a specific set of
 4. Only write different records into Neon.
 5. Using dbt, transform the source data into biggest changes for ratings and number of reviews in day, month, and year timescales.
 6. Visualise the results (TBD)
+
+## Deployment notes
+
+`docker build -t shopify-apps-worker .`
+`docker run -d --env-file .env --name saw-container shopify-apps-worker`
