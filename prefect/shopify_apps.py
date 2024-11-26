@@ -4,6 +4,8 @@ import hashlib
 from playwright.sync_api import sync_playwright, expect
 from prefect import task, flow, get_run_logger
 from prefect_sqlalchemy import SqlAlchemyConnector
+from prefect_github import GitHubCredentials
+from prefect.runner.storage import GitRepository
 
 @task(retries=2, retry_delay_seconds=60)
 def test_shopify_app_page(url: str) -> bool:
@@ -180,14 +182,17 @@ def shopify_apps_flow():
     load_stg_shopify_apps(new_data)
 
 
-def deploy_shopify_apps_flow():
-    shopify_apps_flow.deploy(
-        name="shopify-apps-deployment",
-        work_pool_name="process-work-pool",
-        image="shopify-apps",
-        cron="0 0,6,12,18 * * *",
-    )
-    return
-
 if __name__ == "__main__":
-    deploy_shopify_apps_flow()
+    github_repo = GitRepository(
+            url="https://github.com/dylanlim-jy/shopify-ranker",
+            credentials=GitHubCredentials.load("dylan-github-pat")
+        )
+
+    flow.from_source(
+        source=github_repo,
+        entrypoint="prefect/shopify_apps.py:shopify_apps_flow",
+    ).deploy(
+        name="shopify-apps-flow",
+        work_pool_name="process-work-pool",
+        cron="0 0,6,12,18 * * *"
+    )
