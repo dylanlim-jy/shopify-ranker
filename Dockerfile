@@ -12,4 +12,4 @@ RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Run Prefect worker in the background
-CMD ["prefect", "worker", "start", "--pool", "docker-pool"]
+CMD ["prefect", "worker", "start", "--pool", "process-work-pool"]

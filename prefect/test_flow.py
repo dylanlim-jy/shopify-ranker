@@ -19,7 +19,7 @@ if __name__ == "__main__":
         source=github_repo,
         entrypoint="prefect/test_flow.py:test_flow",
     ).deploy(
-        name="test-private-github-deploy",
-        work_pool_name="docker-pool",
+        name="test-process-deploy",
+        work_pool_name="process-work-pool",
         cron="* * * * *"
     )
