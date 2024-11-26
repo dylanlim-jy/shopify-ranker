@@ -5,7 +5,7 @@ from prefect.runner.storage import GitRepository
 @flow
 def test_flow():
     logger = get_run_logger()
-    logger.info("Testing a flow")
+    logger.info("Testing an UPDATED flow")
     return
 
 
