@@ -139,8 +139,8 @@ def compare_sha_keys(source_data: list[dict]) -> list[dict]:
             else:
                 records_to_write.append(record)
         
-        print(records_to_write)
-        return(records_to_write)
+        print(f"Preparing to write {len(records_to_write)} records.")
+        return records_to_write
 
 
 @task(retries=2, retry_delay_seconds=30)
@@ -152,26 +152,30 @@ def load_stg_shopify_apps(data: list[dict]):
     """
     with SqlAlchemyConnector.load("neon-postgres") as database_block:
         logger = get_run_logger()
-        database_block.execute_many("""
-            INSERT INTO stg_shopify_apps (
-                app_name,
-                app_url,
-                ranking,
-                average_rating,
-                total_reviews,
-                is_ad,
-                sha256_surrogate_key
-            ) VALUES (
-                :app_name,
-                :app_url,
-                :ranking,
-                :average_rating,
-                :total_reviews,
-                :is_ad,
-                :sha256_surrogate_key
-            );""", seq_of_parameters=data)
-        logger.info(f"Successfully wrote {len(data)} records into table stg_shopify_apps")
-        return
+        if len(data) > 0:
+            database_block.execute_many("""
+                INSERT INTO stg_shopify_apps (
+                    app_name,
+                    app_url,
+                    ranking,
+                    average_rating,
+                    total_reviews,
+                    is_ad,
+                    sha256_surrogate_key
+                ) VALUES (
+                    :app_name,
+                    :app_url,
+                    :ranking,
+                    :average_rating,
+                    :total_reviews,
+                    :is_ad,
+                    :sha256_surrogate_key
+                );""", seq_of_parameters=data)
+            logger.info(f"Successfully wrote {len(data)} records into table stg_shopify_apps")
+            return
+        else:
+            logger.info("No data to write.")
+            return
 
 
 @flow(name="Shopify apps")
